@@ -1,0 +1,65 @@
+#entries
+  %h1 Time Entries
+
+  %label(for="start-date") Start Date
+  %input#start-date(type="date" value="#{@start_date}" style="padding: 5px;")
+
+  &nbsp; &nbsp; &nbsp;
+
+  %label(for="end-date") End Date
+  %input#end-date(type="date" value="#{@end_date}" style="padding: 5px;")
+
+  %br
+  %br
+  %br
+
+  .row
+    .col-lg-12
+      %input#filter(type="text" style="width: 100%; padding: 10px" columns="300" placeholder="Regex to filter entries")
+
+  %br
+
+  %table.table
+    %thead
+      %col(width="10%")
+      %col(width="80%")
+      %col(width="10%")
+      %tr
+        %th Include?
+        %th Description
+        %th Hours
+    %tbody
+      %col(width="10%")
+      %col(width="80%")
+      %col(width="10%")
+      %tr
+        %td
+          %label(for="select-all") Select All
+          %input#select-all(type="checkbox")
+        %td
+        %td
+      %tr
+        %td
+        %td Chrome
+        %td
+      - for entry <- @chrome_entries do
+        %tr.entry
+          %td
+            %input.include(type="checkbox" data-hours="#{seconds_to_hours(entry.seconds)}")
+          %td(style="max-width: 150px; word-wrap: break-word")= entry.description
+          %td= seconds_to_hours(entry.seconds)
+      %tr
+        %td
+        %td iTerm
+        %td
+      - for entry <- @iterm_entries do
+        %tr.entry
+          %td
+            %input.include(type="checkbox" data-hours="#{seconds_to_hours(entry.seconds)}")
+          %td(style="max-width: 150px; word-wrap: break-word")= entry.description
+          %td= seconds_to_hours(entry.seconds)
+
+      %tr
+        %td
+        %td Total
+        %td#total
