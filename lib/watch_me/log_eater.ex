@@ -93,8 +93,10 @@ defmodule WatchMe.LogEater do
       if time_one > time_two  do
         update_args = %{last_time: time}
 
-        if LogEntry.time_diff(time, model.last_time) == 1 do
-          update_args = update_args |> Map.put(:seconds, model.seconds + 1)
+        diff = LogEntry.time_diff(time, model.last_time)
+
+        if diff > 0 && diff < 3 do
+          update_args = update_args |> Map.put(:seconds, model.seconds + diff)
         end
 
         model_changeset = Ecto.Changeset.change model, update_args
