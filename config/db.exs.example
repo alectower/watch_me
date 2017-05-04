@@ -1,0 +1,11 @@
+use Mix.Config
+
+args = [
+  adapter: Ecto.Adapters.Postgres,
+  username: "",
+  password: "",
+  database: "watch_me_#{Mix.env}",
+  pool_size: 10
+]
+
+config :watch_me, WatchMe.Repo, args
