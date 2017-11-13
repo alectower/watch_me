@@ -44,42 +44,18 @@ repeat
             end if
           end if
         else
-          set fileName to paragraph ((length of paragraphs of tabContent)) of tabContent
+          set fileName to paragraph (length of paragraphs of tabContent) of tabContent
           if fileName starts with " " or fileName is equal to ""
             set fileName to "N/A"
-          else
-            set text item delimiters of AppleScript to linefeed
-            set fileName to first text item of fileName
           end if
         end if
       end tell
 
-      if fileName is not equal to ""
-        set logLine to "time='" & (current date) & "' app='iTerm2'" & " tab='" & tabName & "'" & " file='" & fileName & "'"
-      end if
+      set logLine to "time='" & (current date) & "' app='iTerm2'" & " tab='" & tabName & "'" & " file='" & fileName & "'"
     end if
 
     if logLine is not equal to "" then
-      tell application "Finder"
-        set homePath to path to home folder as text
-        set logPathItems to homePath
-        set text item delimiters of AppleScript to {":"}
-        set userName to text item 3 of logPathItems
-        set logPath to "/Users/" & userName & "/.watch_me/watch_me.log"
-        try
-          set myLogFile to logPath as POSIX file
-        on error
-          set myLogFile to make new document file at logPath as POSIX file
-        end try
-
-        try
-          open for access myLogFile with write permission
-          write logLine & "\n" to myLogFile starting at eof
-          close access myLogFile
-        on error
-          close access myLogFile
-        end try
-      end tell
+      do shell script "sfk udpsend localhost 4001 \"" & logLine & "\""
     end if
   end tell
 

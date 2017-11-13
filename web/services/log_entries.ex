@@ -16,7 +16,7 @@ defmodule WatchMe.LogEntries do
         a in WatchMe.TimeEntryCount,
         where: a.app_name == ^name,
         where: a.date == ^date,
-        order_by: [a.description]
+        order_by: [asc: :description, desc: :seconds]
       )
     )
   end
@@ -28,7 +28,7 @@ defmodule WatchMe.LogEntries do
         a in WatchMe.TimeEntryCount,
         where: a.app_name == ^name,
         where: a.date == ^date,
-        order_by: [a.description]
+        order_by: [asc: :description, desc: :seconds]
       )
     )
   end
@@ -41,7 +41,7 @@ defmodule WatchMe.LogEntries do
         a in WatchMe.TimeEntryCount,
         where: a.app_name == ^name,
         where: a.date >= ^start_date and a.date <= ^end_date,
-        order_by: [a.description]
+        order_by: [asc: :description, desc: :seconds]
       )
     )
   end

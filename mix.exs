@@ -4,7 +4,7 @@ defmodule WatchMe.Mixfile do
   def project do
     [app: :watch_me,
      version: "0.0.1",
-     elixir: "~> 1.2",
+     elixir: "~> 1.5",
      elixirc_paths: elixirc_paths(Mix.env),
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
@@ -40,7 +40,9 @@ defmodule WatchMe.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:timex, "~> 3.0"},
-     {:tzdata, "~> 0.1.8", override: true} ]
+     {:tzdata, "~> 0.1.8", override: true},
+     {:socket, "~> 0.3"}
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

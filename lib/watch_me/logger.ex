@@ -1,17 +1,17 @@
 defmodule WatchMe.Logger do
   def start_link do
-    GenServer.start_link(__MODULE__, [], name: :watch_me_logger)
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
   def init([]) do
-    start_logger
+    start_logger()
     schedule_check(1)
     {:ok, []}
   end
 
   def handle_info(:start_logger, state) do
-    start_logger
-    schedule_check(1_000_000)
+    start_logger()
+    schedule_check(100_000)
     {:noreply, state}
   end
 
@@ -24,18 +24,17 @@ defmodule WatchMe.Logger do
   end
 
   def start_logger do
-    if logger_pids |> Enum.empty? do
+    if logger_pids() |> Enum.empty? do
       IO.puts "Starting logger"
+
       spawn fn ->
         System.cmd "osascript", ["lib/watch_me/logger.scpt"]
       end
-    else
-      IO.puts "Logger already started"
     end
   end
 
   def stop_logger do
-    pids = logger_pids
+    pids = logger_pids()
     pids
     |> Enum.each(fn (l) ->
       IO.puts "Killing process #{l}"

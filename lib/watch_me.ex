@@ -8,17 +8,11 @@ defmodule WatchMe do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Start the Ecto repository
       supervisor(WatchMe.Repo, []),
-      # Start the endpoint when the application starts
       supervisor(WatchMe.Endpoint, []),
       worker(WatchMe.Logger, []),
-      worker(WatchMe.LogEater, [])
+      worker(WatchMe.LogListener, [])
     ]
-
-    System.at_exit fn (status) ->
-      Process.send_after(:watch_me_logger, :stop_logger)
-    end
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options

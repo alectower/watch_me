@@ -3,49 +3,14 @@ defmodule WatchMe.LogEater do
   alias WatchMe.Repo
   alias WatchMe.TimeEntryCount
 
-  def start_link do
-    GenServer.start_link(__MODULE__, [])
-  end
-
-  def init([]) do
-    schedule_eat(5000)
-    {:ok, []}
-  end
-
-  def handle_info(:eat, state) do
-    eat
-    schedule_eat(900_000)
-    {:noreply, state}
-  end
-
-  def schedule_eat(seconds) do
-    Process.send_after(self(), :eat, seconds)
-  end
-
-  def eat do
+  def eat(line) do
     Logger.configure(level: :info)
-    IO.puts "Syncing with log file #{Timex.now}"
 
-    #{:ok, files} = File.ls(Path.expand("~/.watch_me"))
-    #files
-    #|> Enum.each(fn (file) ->
-    #  File.stream!(Path.expand("~/.watch_me/#{file}"))
-    #  |> Enum.map(&insert_into_db/1)
-    #end)
-
-    File.stream!(Path.expand("~/.watch_me/watch_me.log"))
-    |> Enum.map(&insert_into_db/1)
-
-    IO.puts "Done syncing! #{Timex.now}"
-    Logger.configure(level: :debug)
-
-    :ok
-  end
-
-  defp insert_into_db(line) do
-    Process.sleep(1)
     line_map = line |> LogEntry.to_map
+
     insert_entry(line_map["app"], line_map)
+
+    Logger.configure(level: :debug)
   end
 
   defp insert_entry("Google Chrome", entry_map) do
